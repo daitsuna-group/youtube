@@ -1,6 +1,6 @@
 <?php
 
-namespace Dawson\Youtube;
+namespace DaitsunaGroup\Youtube;
 
 use Exception;
 use Google_Client;
@@ -72,16 +72,16 @@ class Youtube
     /**
      * Upload the video to YouTube
      *
-     * @param  string $path
-     * @param  array $data
-     * @param  string $privacyStatus
+     * @param string $path
+     * @param array $data
+     * @param string $privacyStatus
      * @return self
      * @throws Exception
      */
     public function upload($path, array $data = [], $privacyStatus = 'public')
     {
-        if(!file_exists($path)) {
-            throw new Exception('Video file does not exist at path: "'. $path .'". Provide a full path to the file before attempting to upload.');
+        if (!file_exists($path)) {
+            throw new Exception('Video file does not exist at path: "' . $path . '". Provide a full path to the file before attempting to upload.');
         }
 
         $this->handleAccessToken();
@@ -130,7 +130,7 @@ class Youtube
             // Set the Snippet from Uploaded Video
             $this->snippet = $status['snippet'];
 
-        }  catch (\Google_Service_Exception $e) {
+        } catch (\Google_Service_Exception $e) {
             throw new Exception($e->getMessage());
         } catch (\Google_Exception $e) {
             throw new Exception($e->getMessage());
@@ -142,9 +142,9 @@ class Youtube
     /**
      * Update the video on YouTube
      *
-     * @param  string $id
-     * @param  array $data
-     * @param  string $privacyStatus
+     * @param string $id
+     * @param array $data
+     * @param string $privacyStatus
      * @return self
      * @throws Exception
      */
@@ -153,7 +153,7 @@ class Youtube
         $this->handleAccessToken();
 
         if (!$this->exists($id)) {
-            throw new Exception('A video matching id "'. $id .'" could not be found.');
+            throw new Exception('A video matching id "' . $id . '" could not be found.');
         }
 
         try {
@@ -166,7 +166,7 @@ class Youtube
 
             // Set the Snippet from Updated Video
             $this->snippet = $status['snippet'];
-        }  catch (\Google_Service_Exception $e) {
+        } catch (\Google_Service_Exception $e) {
             throw new Exception($e->getMessage());
         } catch (\Google_Exception $e) {
             throw new Exception($e->getMessage());
@@ -178,7 +178,7 @@ class Youtube
     /**
      * Set a Custom Thumbnail for the Upload
      *
-     * @param  string $imagePath
+     * @param string $imagePath
      * @return self
      * @throws Exception
      */
@@ -207,7 +207,7 @@ class Youtube
             $handle = fopen($imagePath, "rb");
 
             while (!$status && !feof($handle)) {
-                $chunk  = fread($handle, $chunkSizeBytes);
+                $chunk = fread($handle, $chunkSizeBytes);
                 $status = $media->nextChunk($chunk);
             }
 
@@ -228,7 +228,7 @@ class Youtube
     /**
      * Delete a YouTube video by it's ID.
      *
-     * @param  int $id
+     * @param int $id
      * @return bool
      * @throws Exception
      */
@@ -237,7 +237,7 @@ class Youtube
         $this->handleAccessToken();
 
         if (!$this->exists($id)) {
-            throw new Exception('A video matching id "'. $id .'" could not be found.');
+            throw new Exception('A video matching id "' . $id . '" could not be found.');
         }
 
         return $this->youtube->videos->delete($id);
@@ -254,9 +254,9 @@ class Youtube
         // Setup the Snippet
         $snippet = new \Google_Service_YouTube_VideoSnippet();
 
-        if (array_key_exists('title', $data))       $snippet->setTitle($data['title']);
+        if (array_key_exists('title', $data)) $snippet->setTitle($data['title']);
         if (array_key_exists('description', $data)) $snippet->setDescription($data['description']);
-        if (array_key_exists('tags', $data))        $snippet->setTags($data['tags']);
+        if (array_key_exists('tags', $data)) $snippet->setTags($data['tags']);
         if (array_key_exists('category_id', $data)) $snippet->setCategoryId($data['category_id']);
 
         // Set the Privacy Status
@@ -265,8 +265,7 @@ class Youtube
 
         // Set the Snippet & Status
         $video = new \Google_Service_YouTube_Video();
-        if ($id)
-        {
+        if ($id) {
             $video->setId($id);
         }
 
@@ -279,7 +278,7 @@ class Youtube
     /**
      * Check if a YouTube video exists by it's ID.
      *
-     * @param  int  $id
+     * @param int $id
      *
      * @return bool
      */
@@ -333,7 +332,7 @@ class Youtube
      */
     private function setup(Google_Client $client)
     {
-        if(
+        if (
             !$this->app->config->get('youtube.client_id') ||
             !$this->app->config->get('youtube.client_secret')
         ) {
@@ -357,7 +356,7 @@ class Youtube
     /**
      * Saves the access token and channel information to the database.
      *
-     * @param  string  $accessToken
+     * @param string $accessToken
      */
     public function saveAccessTokenToDB($accessToken)
     {
@@ -377,10 +376,10 @@ class Youtube
     public function getLatestAccessTokenFromDB()
     {
         $latest = DB::table('youtube_access_tokens')
-                    ->latest('created_at')
-                    ->first();
+            ->latest('created_at')
+            ->first();
 
-        return $latest ? (is_array($latest) ? $latest['access_token'] : $latest->access_token ) : null;
+        return $latest ? (is_array($latest) ? $latest['access_token'] : $latest->access_token) : null;
     }
 
     /**
@@ -394,11 +393,9 @@ class Youtube
             throw new \Exception('An access token is required.');
         }
 
-        if($this->client->isAccessTokenExpired())
-        {
+        if ($this->client->isAccessTokenExpired()) {
             // If we have a "refresh_token"
-            if (array_key_exists('refresh_token', $accessToken))
-            {
+            if (array_key_exists('refresh_token', $accessToken)) {
                 // Refresh the access token
                 $this->client->refreshToken($accessToken['refresh_token']);
 
@@ -449,8 +446,8 @@ class Youtube
     /**
      * Pass method calls to the Google Client.
      *
-     * @param  string  $method
-     * @param  array   $args
+     * @param string $method
+     * @param array $args
      *
      * @return mixed
      */

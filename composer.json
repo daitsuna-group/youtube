@@ -1,42 +1,42 @@
 {
-    "name": "dawson/youtube",
-    "description": "Upload a video to YouTube with Laravel 9.",
-    "license": "MIT",
-    "authors": [
-        {
-            "name": "Joe Dawson",
-            "email": "hi@joedawson.me"
-        }
-    ],
-    "require": {
-        "php": "^7.0|^8.0",
-        "illuminate/support": "^5.4|^6.0|^7.0|^8.0|^9.0",
-        "google/apiclient": "^2.12"
-    },
-    "require-dev": {
-        "orchestra/testbench": "~3.2",
-        "phpunit/phpunit": "~5.0",
-        "phpunit/phpcov": "~3.0"
-    },
-    "autoload": {
-        "psr-4": {
-            "Dawson\\Youtube\\": "src/"
-        }
-    },
-    "autoload-dev": {
-        "psr-4": {
-            "Dawson\\Youtube\\Tests\\": "tests/"
-        }
-    },
-    "minimum-stability": "stable",
-    "extra": {
-        "laravel": {
-            "providers": [
-                "Dawson\\Youtube\\YoutubeServiceProvider"
-            ],
-            "aliases": {
-                "Youtube": "Dawson\\Youtube\\Facades\\Youtube"
-            }
-        }
+  "name": "daitsuna-group/youtube",
+  "description": "Upload a video to YouTube with Laravel 9.",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Marat Sharipov",
+      "email": "marat@sharipov.kz"
     }
+  ],
+  "require": {
+    "php": "^7.0|^8.0",
+    "illuminate/support": "^7.0|^8.0|^9.0",
+    "google/apiclient": "^2.12"
+  },
+  "require-dev": {
+    "orchestra/testbench": "~3.2",
+    "phpunit/phpunit": "~5.0",
+    "phpunit/phpcov": "~3.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "DaitsunaGroup\\Youtube\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "DaitsunaGroup\\Youtube\\Tests\\": "tests/"
+    }
+  },
+  "minimum-stability": "stable",
+  "extra": {
+    "laravel": {
+      "providers": [
+        "DaitsunaGroup\\Youtube\\YoutubeServiceProvider"
+      ],
+      "aliases": {
+        "Youtube": "DaitsunaGroup\\Youtube\\Facades\\Youtube"
+      }
+    }
+  }
 }
