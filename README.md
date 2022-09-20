@@ -169,6 +169,14 @@ You can get Channel ID, Channel title and Poster of active Youtube channel:
 Youtube::getChannelInfo();
 ```
 
+# Logout
+
+For logout and clear all credentials:
+
+```php
+Youtube::logout();
+```
+
 # Questions
 
 Should you have any questions, please feel free to submit an issue.
