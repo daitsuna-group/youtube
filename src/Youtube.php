@@ -404,6 +404,13 @@ class Youtube
             }
         }
     }
+    /**
+     * Clear all tokens from DB
+     */
+    public static function logout()
+    {
+        DB::table('youtube_access_tokens')->truncate();
+    }
 
     /**
      * Get channel information from Youtube
