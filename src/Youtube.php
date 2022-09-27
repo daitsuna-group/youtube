@@ -262,7 +262,12 @@ class Youtube
         // Set the Privacy Status
         $status = new \Google_Service_YouTube_VideoStatus();
         $status->privacyStatus = $privacyStatus;
-
+        if (array_key_exists('selfDeclaredMadeForKids', $data))
+        {
+            $status->selfDeclaredMadeForKids = $data['selfDeclaredMadeForKids'];
+        } else {
+            $status->selfDeclaredMadeForKids = false;
+        }
         // Set the Snippet & Status
         $video = new \Google_Service_YouTube_Video();
         if ($id) {
@@ -461,5 +466,50 @@ class Youtube
     public function __call($method, $args)
     {
         return call_user_func_array([$this->client, $method], $args);
+    }
+
+    /**
+     * Return the Video duration
+     * @param  int  $video_id
+     *
+     * @return int
+     */
+    public function getDuration($video_id)
+    {
+        $listResponse = $this->youtube->videos->listVideos("contentDetails", array('id' => $video_id));
+
+        // If $listResponse is empty, the specified video was not found.
+        if (!isset($listResponse[0])) {
+            return sprintf('<h3>Can\'t find a video with video id: %s</h3>', $video_id);
+        } else {
+            $seconds = 0;
+            if (isset($listResponse[0]['contentDetails']) && isset($listResponse[0]['contentDetails']['duration'])) {
+                // Since the request specified a video ID, the response only contains one video resource.
+                $duration = $listResponse[0]['contentDetails']['duration'];
+                $seconds = $this->ISO8601ToSeconds($duration);
+            }
+
+            return $seconds;
+        }
+    }
+
+    /**
+     * Converts Time ISO-8601 to secs
+     *
+     * @return int
+     */
+    public static function ISO8601ToSeconds($ISO8601)
+    {
+        preg_match('/(\d{1,2})[H]/', $ISO8601, $hours);
+        preg_match('/(\d{1,2})[M]/', $ISO8601, $minutes);
+        preg_match('/(\d{1,2})[S]/', $ISO8601, $seconds);
+
+        $hours = isset($hours[1]) ? $hours[1] : 0;
+        $minutes = isset($minutes[1]) ? $minutes[1] : 0;
+        $seconds = isset($seconds[1]) ? $seconds[1] : 0;
+
+        $totalSeconds = ($hours * 60 * 60) + ($minutes * 60) + $seconds;
+
+        return $totalSeconds;
     }
 }
